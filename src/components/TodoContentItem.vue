@@ -9,33 +9,37 @@
   </div>
 </template>
 
-<script>
-import bus from "@/utils/bus";
+<script lang="ts">
+import { defineComponent, PropType, ref } from "vue";
+import { TodosProps } from "../App.vue";
+import mitt from "mitt";
 
-export default {
-  data() {
-    return {
-      complete: this.todo.complete,
-    };
-  },
+export default defineComponent({
   props: {
     todo: {
-      type: Object,
-      default() {
-        return {};
-      },
+      type: Object as PropType<TodosProps>,
     },
   },
-  methods: {
-    changeComplete() {
-      bus.$emit("changeComplete", this.todo.id);
-      this.complete = !this.complete;
-    },
-    deleteTodo() {
-      bus.$emit("deleteTodo", this.todo.id);
-    },
+  setup(props) {
+    const emitter = mitt();
+    const complete = ref(props.todo.complate);
+
+    const changeComplete = () => {
+      emitter.emit("changeComplete", props.todo.id);
+      complete.value = !complete.value;
+    };
+
+    const deleteTodo = () => {
+      emitter.emit("deleteTodo", props.todo.id);
+    };
+
+    return {
+      complete,
+      changeComplete,
+      deleteTodo,
+    };
   },
-};
+});
 </script>
 <style lang="less" scoped>
 @import url("//at.alicdn.com/t/font_2218934_nernx0jdp1q.css");
@@ -55,7 +59,6 @@ export default {
   }
   label {
     flex: 1;
-    
   }
   .label {
     text-decoration: line-through;

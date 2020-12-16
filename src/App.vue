@@ -4,7 +4,7 @@
       <h1>欢迎使用Tcgogo代办事项</h1>
       <todo-add @appendTodo="appendTodo" :tid="tid"></todo-add>
       <todo-list></todo-list>
-      <!-- <todo-content></todo-content> -->
+      <todo-content :todos="todos"></todo-content>
     </div>
   </main>
 </template>
@@ -13,7 +13,7 @@
 import { defineComponent, ref, computed } from "vue";
 import TodoAdd from "./components/TodoAdd.vue";
 import TodoList from "./components/TodoList.vue";
-// import TodoContent from "./components/TodoContent.vue";
+import TodoContent from "./components/TodoContent.vue";
 
 export interface TodosProps {
   id: number;
@@ -26,13 +26,14 @@ export default defineComponent({
   components: {
     TodoAdd,
     TodoList,
-    // TodoContent,
+    TodoContent,
   },
   setup() {
     const todos = ref([{ id: 1, complate: true, value: "sad" }]);
 
     const appendTodo = (todo: TodosProps) => {
       todos.value.push(todo);
+      console.log(todos.value)
     };
 
     const tid = computed(() => {

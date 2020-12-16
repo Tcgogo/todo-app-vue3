@@ -9,49 +9,52 @@
   </div>
 </template>
 
-<script>
-import TodoContentItem from "./TodoContentItem";
-import bus from "@/utils/bus";
-
-export default {
-  data() {
-    return {
-      isCheck: false,
-      msg: "all",
-    };
-  },
+<script lang="ts">
+import { computed, defineComponent, onMounted, PropType, ref } from "vue";
+import mitt from 'mitt';
+import TodoContentItem from "./TodoContentItem.vue";
+import {TodosProps} from "../App.vue";
+import { msgType } from "./TodoList.vue"
+export default defineComponent({
   props: {
     todos: {
-      type: Array,
-      default() {
-        return [];
-      },
+      type: Array as PropType<TodosProps[]>
     },
   },
   components: {
-    TodoContentItem,
+    TodoContentItem
   },
-  computed: {
-    newTodo() {
-      switch (this.msg) {
+  setup(props) {
+    const emitter = mitt();
+    const isCheck = ref(false);
+    const msg: msgType = ref("all");
+
+    const newTodo = computed(() => {
+      switch (msg.value) {
         case "all":
-          return this.todos;
-          break;
+          return props.todos;
         case "done":
-          return this.todos.filter((item) => item.complete);
-          break;
+          return props.todos.filter((item) => item.complete);
         case "todo":
-          return this.todos.filter((item) => !item.complete);
-          break;
+          return props.todos.filter((item) => !item.complete);
       }
-    },
-  },
-  mounted() {
-    bus.$on("changeList", (msg) => {
-      this.msg = msg;
-    });
-  },
-};
+    })
+
+    onMounted(() => {
+      emitter.on("changeList", (msg) => {
+        console.log(msg);
+      });
+      
+    })
+
+    return {
+      newTodo,
+      isCheck,
+      msg
+    }
+  }
+
+});
 </script>
 <style lang="less" scoped>
 .todo-content {

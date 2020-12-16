@@ -16,6 +16,7 @@
 
 <script lang="ts">
 import { defineComponent, ref } from "vue";
+import mitt from "mitt";
 type msgType = "all" | "done" | "todo";
 export interface TitleProps {
   value: string;
@@ -23,6 +24,8 @@ export interface TitleProps {
 }
 export default defineComponent({
   setup() {
+    const emitter = mitt();
+    console.log(emitter)
     const titleList: TitleProps[] = [
       { value: "全部", msg: "all" },
       { value: "已完成", msg: "done" },
@@ -32,13 +35,14 @@ export default defineComponent({
 
     const changeActive = (msg: msgType) => {
       titleVal.value = msg;
-    }
+      emitter.emit("changeList", msg);
+    };
 
     return {
       titleVal,
       titleList,
-      changeActive
-    }
+      changeActive,
+    };
   },
 });
 </script>
