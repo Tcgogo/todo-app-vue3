@@ -3,8 +3,8 @@
     <div class="container">
       <h1>欢迎使用Tcgogo代办事项</h1>
       <todo-add @appendTodo="appendTodo" :tid="tid"></todo-add>
-      <!-- <todo-list></todo-list>
-      <todo-content></todo-content> -->
+      <todo-list></todo-list>
+      <!-- <todo-content></todo-content> -->
     </div>
   </main>
 </template>
@@ -12,7 +12,7 @@
 <script lang="ts">
 import { defineComponent, ref, computed } from "vue";
 import TodoAdd from "./components/TodoAdd.vue";
-// import TodoList from "./components/TodoList.vue";
+import TodoList from "./components/TodoList.vue";
 // import TodoContent from "./components/TodoContent.vue";
 
 export interface TodosProps {
@@ -25,7 +25,7 @@ export default defineComponent({
   name: "App",
   components: {
     TodoAdd,
-    // TodoList,
+    TodoList,
     // TodoContent,
   },
   setup() {
